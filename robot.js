@@ -11,7 +11,7 @@ const roads = [
 function buildGraph(edges){
     let graph = Object.create(null)
     function addEdge(from, to){
-        if(graph[from] === null){
+        if(!graph[from]){
             graph[from] = [to]
         } else {
             graph[from].push(to)
@@ -26,4 +26,27 @@ function buildGraph(edges){
     return graph
 }
 
-const roadGraphs = buildGraph(roads)
+const roadGraph = buildGraph(roads)
+
+class VillageState {
+    constuctor(place, parcels){
+        this.place = place
+        this.parcels = parcels
+    }
+
+    move(destination) {
+        if(!roadGraph[this.place].includes(destination)){
+            return this
+        } else {
+            let parcels = this.parcels.map(parcel => {
+                if(parcel.place !== this.place) return parcel;
+                return { 
+                    place: destination, 
+                    address: parcel.address
+                }
+            }).filter(parcel => parcel.place !== parcel.address)
+
+            return new VillageState(destination, parcels);
+        }
+    }
+}
