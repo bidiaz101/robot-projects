@@ -49,6 +49,18 @@ class VillageState {
             return new VillageState(destination, parcels);
         }
     }
+
+    random(parcelCount = 5){
+        let parcels = [];
+        for (let i = 0 ; i < parcelCount; i++){
+            let address = randomPick(Object.keys(roadGraph));
+            let place
+            do {
+                place = randomPick(Object.keys(roadGraph));
+            } while (place === address);
+            parcels.push({place, address})
+        }
+    }
 }
 
 function runRobot(state, robot, memory){
@@ -62,4 +74,13 @@ function runRobot(state, robot, memory){
         memory = action.memory;
         console.log(`Moved to ${action.direction}`)
     }
+}
+
+function randomPick(array){
+    let choice = Math.floor(Math.random() * array.length);
+    return array[choice]
+}
+
+function randomRobot(state){
+    return { direction : randomPick(roadGraph[state.place]) };
 }
